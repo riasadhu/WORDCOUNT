@@ -8,14 +8,3 @@ select split(lines,'') as word from input;
 select explode(split(lines,'')) as word from input;
 select word,count(*) as count from (select explode(split(lines,'') )as word from input) a  group by word ;
 
-word count using PIG
-word count
-
-wordcount = load '/home/hduser/file.txt' using TextLoader() as (lines:chararray);
-
-wordcount1 = foreach wordcount generate FLATTEN(TOKENSIZE(lines)) as word ;
-
-wordcount2 = foreach wordcount1 generate TRIM(LOWER(REPLACE(word,[//p{punct},//p{cntrl}],''))) as word;
-
-groupbyword = group wordcount2 by word;
-countofeachword= foreach groupbyword generate group,COUNT(wordcount2);
